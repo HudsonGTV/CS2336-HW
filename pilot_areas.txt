@@ -1,0 +1,4 @@
+Greedo	25.5
+Bobby	25.5
+Tina	21.3184
+Timmy	52.5
