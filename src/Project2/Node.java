@@ -1,6 +1,6 @@
 package Project2;
 
-public class Node<T> {
+public class Node<T> implements Comparable {
 	
 	private T m_value;
 	
@@ -59,6 +59,11 @@ public class Node<T> {
 	
 	@Override public String toString() {
 		return m_value.toString();
+	}
+
+	@Override public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

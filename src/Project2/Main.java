@@ -22,7 +22,7 @@ public class Main {
 	private static final int MAX_PILOT_COUNT = 20;
 	private static final int MAX_COORD_COUNT = 16;
 	
-	public static void main(String[] args) throws Exception {
+	/*public static void main(String[] args) throws Exception {
 		
 		// Variables to store pilot info
 		String[] pilotNames = new String[MAX_PILOT_COUNT];
@@ -48,7 +48,7 @@ public class Main {
 		// Notify user that program has completed
 		System.out.println("Done!");
 		
-	}
+	}*/
 	
 	/**
 	 * Loads data from file and stores it in passed array args - assume file is in correct format
