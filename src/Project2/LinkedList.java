@@ -24,11 +24,28 @@ public class LinkedList {
 		
 	}
 	
-	private void swap(int i1, int i2) {
+	private void swap(int index1, int index2) {
 		
 		// Get the nodes at specified index
+		Node<Driver> ref1 = getAt(index1);
+		Node<Driver> ref2 = null;
 		
-		// If i2 is only 1 apart, then get second node from first node
+		// If i2 is only 1 apart, then get second node from first node, otherwise run getAt to get second
+		switch(index2 - index1) {
+		case 1:		// i2 is right after i1
+			ref2 = ref1.getNextNode();
+			break;
+		case -1:	// i2 is right before i1
+			ref2 = ref1.getPrevNode();
+			break;
+		default:	// otherwise use less efficient getAt to iterate to desired node
+			ref2 = getAt(index2);
+			break;	
+		}
+		
+		// Get ref1's prev and next nodes
+		
+		// Get ref2's prev and next nodes
 		
 	}
 	
@@ -130,6 +147,28 @@ public class LinkedList {
 	}
 	
 	/* Getters */
+	
+	public Node<Driver> getAt(int index) {
+		
+		Node<Driver> currRef = getFirstNode();
+		
+		// Ensure valid index
+		if(index < 0) return null;
+		
+		for(int i = 0; i < index && currRef != null; ++i) {
+			// Return when at correct index
+			if(i == index)
+				return currRef;
+			// go to next node
+			currRef = currRef.getNextNode();
+		}
+		
+		System.out.println("[getAt(" + index + ")]: Error: Index out of bounds");
+		
+		// Index out of bounds
+		return null;
+		
+	}
 	
 	public Node<Driver> getFirstNode() {
 		return m_head;
