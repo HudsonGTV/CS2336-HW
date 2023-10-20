@@ -7,8 +7,10 @@ package Project2;
 
 public class Node<T extends Comparable<T>> implements Comparable<T> {
 	
+	// Payload
 	private T m_value;
 	
+	// Ref to prev and next nodes
 	private Node<T> m_next;
 	private Node<T> m_prev;
 	
@@ -21,6 +23,8 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
 	public Node(T value) {
 		m_value = value;
 	}
+	
+	/* GETTERS */
 	
 	/**
 	 * Gets the value contained in the node
@@ -46,6 +50,8 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
 		return m_prev;
 	}
 	
+	/* SETTERS */
+	
 	/**
 	 * Sets next node to specified value
 	 * @param node the node's ref to set to
@@ -62,12 +68,14 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
 		m_prev = node;
 	}
 	
-	@Override public String toString() {
-		return m_value.toString();
-	}
+	/* MISC */
 
 	@Override public int compareTo(T other) {
 		return getValue().compareTo(other);
+	}
+	
+	@Override public String toString() {
+		return m_value.toString();
 	}
 	
 }

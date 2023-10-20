@@ -21,12 +21,12 @@ public class Main {
 	private static final int MAX_PILOT_COUNT = 20;
 	private static final int MAX_COORD_COUNT = 16;
 	
-	/*public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
 		
-		// Variables to store pilot info
-		String[] pilotNames = new String[MAX_PILOT_COUNT];
+		// Variables to store driver info
+		String[] driverNames = new String[MAX_PILOT_COUNT];
 		// [pilot][coord#][coord (0=x, 1=y)]
-		double[][][] pilotData = new double[MAX_PILOT_COUNT][MAX_COORD_COUNT][2];
+		double[][][] driverData = new double[MAX_PILOT_COUNT][MAX_COORD_COUNT][2];
 		
 		// Prompt user for file name
 		System.out.println("Enter input file name: ");
@@ -39,15 +39,15 @@ public class Main {
 		scannerIn.close();
 		
 		// Load file data
-		LoadFileData(fileName, pilotNames, pilotData);
+		LoadFileData(fileName, driverNames, driverData);
 		
 		// Calculate area of each pilot and output it to a file
-		OutputCalculatedData(pilotNames, pilotData);
+		OutputCalculatedData(driverNames, driverData);
 		
 		// Notify user that program has completed
 		System.out.println("Done!");
 		
-	}*/
+	}
 	
 	/**
 	 * Loads data from file and stores it in passed array args - assume file is in correct format

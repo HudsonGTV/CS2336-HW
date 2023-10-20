@@ -21,9 +21,9 @@ public class LinkedList {
 	}
 	
 	/**
-	 * Sorts the linked list in ascending order
+	 * Sorts the linked list in ascending order (bubble sort)
 	 */
-	public void sortList() {
+	public void sort() {
 		
 		int size = size();
 		
@@ -32,15 +32,17 @@ public class LinkedList {
 			
 			boolean didSwap = false;
 			
+			// Run thru entire list
 			for(int j = 0; j < size - 1; ++j) {
 				Node<Driver> curr = getAt(j);
+				// if curr node > next node then swap
 				if(curr.getValue().compareTo(curr.getNextNode().getValue()) > 0) {
 					didSwap = true;
 					swap(j);
 				}
 			}
 			
-			// if we didnt swap then it is already in order
+			// if we didnt swap in above loop then it is already in order
 			if(!didSwap) break;
 			
 		}
@@ -200,6 +202,11 @@ public class LinkedList {
 	
 	/* Getters */
 	
+	/**
+	 * Get a node at a given index
+	 * @param index index of the node
+	 * @return the node at the given index
+	 */
 	public Node<Driver> getAt(int index) {
 		
 		Node<Driver> currRef = getFirstNode();
@@ -219,14 +226,26 @@ public class LinkedList {
 		
 	}
 	
+	/**
+	 * Gets head node
+	 * @return the head node
+	 */
 	public Node<Driver> getFirstNode() {
 		return m_head;
 	}
 	
+	/**
+	 * Gets tail node
+	 * @returnthe tail node
+	 */
 	public Node<Driver> getLastNode() {
 		return m_tail;
 	}
 	
+	/**
+	 * The size of the list
+	 * @return size
+	 */
 	public int size() {
 		
 		int size = 0;
@@ -236,6 +255,15 @@ public class LinkedList {
 		
 		return size;
 		
+	}
+	
+	/**
+	 * Checks if the linked list contains no nodes -
+	 * More efficient than running size() to use to check if empty
+	 * @return If list is empty or not
+	 */
+	public boolean isEmpty() {
+		return m_head == null;
 	}
 	
 	/**
