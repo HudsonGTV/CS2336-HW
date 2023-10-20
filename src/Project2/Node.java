@@ -1,6 +1,11 @@
+/**
+ * Author: Hudson Green
+ * NetID: HKG230000
+**/
+
 package Project2;
 
-public class Node<T> implements Comparable {
+public class Node<T extends Comparable<T>> implements Comparable<T> {
 	
 	private T m_value;
 	
@@ -61,9 +66,8 @@ public class Node<T> implements Comparable {
 		return m_value.toString();
 	}
 
-	@Override public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
+	@Override public int compareTo(T other) {
+		return getValue().compareTo(other);
 	}
 	
 }

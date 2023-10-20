@@ -15,11 +15,13 @@ public class TestMain {
 			list.addRear(new Node<Driver>(new Driver(rand.nextInt(0, 50))));
 		}
 		
-		System.out.print(list.toString());
+		System.out.println(list.toString());
+		
+		//list.swap(5);
 		
 		list.sortList();
 		
-		System.out.print(list.toString());
+		System.out.println(list.toString());
 		
 	}
 	

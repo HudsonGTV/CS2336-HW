@@ -1,3 +1,8 @@
+/**
+ * Author: Hudson Green
+ * NetID: HKG230000
+**/
+
 package Project2;
 
 public class Driver implements Comparable<Driver> {

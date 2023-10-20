@@ -1,7 +1,6 @@
 /**
  * Author: Hudson Green
  * NetID: HKG230000
- * Summary: This program calculates the area of an n-sided shape given the coordinates for that shape via the summation equation given in the project 1 instructions
 **/
 
 // For teacher: You may have to remove this line if not running in Eclipse under a package name Project1

@@ -1,3 +1,8 @@
+/**
+ * Author: Hudson Green
+ * NetID: HKG230000
+**/
+
 package Project2;
 
 public class LinkedList {
@@ -20,32 +25,79 @@ public class LinkedList {
 	 */
 	public void sortList() {
 		
+		int size = size();
 		
+		// Bubble sort
+		for(int i = 0; i < size - 1; ++i) {
+			
+			boolean didSwap = false;
+			
+			for(int j = 0; j < size - 1; ++j) {
+				Node<Driver> curr = getAt(j);
+				if(curr.getValue().compareTo(curr.getNextNode().getValue()) > 0) {
+					didSwap = true;
+					swap(j);
+				}
+			}
+			
+			// if we didnt swap then it is already in order
+			if(!didSwap) break;
+			
+		}
 		
 	}
 	
-	private void swap(int index1, int index2) {
+	/**
+	 * Swaps node at current index with the node to the right (node.m_next) of it
+	 * @param index index of original 1st node
+	 */
+	public void swap(int index) {
 		
-		// Get the nodes at specified index
-		Node<Driver> ref1 = getAt(index1);
-		Node<Driver> ref2 = null;
+		// Get ref to first node
+		Node<Driver> n1 = getAt(index);
 		
-		// If i2 is only 1 apart, then get second node from first node, otherwise run getAt to get second
-		switch(index2 - index1) {
-		case 1:		// i2 is right after i1
-			ref2 = ref1.getNextNode();
-			break;
-		case -1:	// i2 is right before i1
-			ref2 = ref1.getPrevNode();
-			break;
-		default:	// otherwise use less efficient getAt to iterate to desired node
-			ref2 = getAt(index2);
-			break;	
-		}
+		// Ensure a swap is possible
+		if(n1 == null || n1.getNextNode() == null) return;
 		
-		// Get ref1's prev and next nodes
+		// Get reference to second node
+		Node<Driver> n2 = n1.getNextNode();
 		
-		// Get ref2's prev and next nodes
+		// Temp node
+		Node<Driver> tmp = null;
+		
+		/* Check if head and tail need to point to other node */
+		if(m_head == n1)
+			m_head = n2;
+		if(m_tail == n2)
+			m_tail = n1;
+		
+		/* Make "n2" and "n1's prev (tmp)" node point to each other */
+		
+		// get node in front of n1
+		tmp = n1.getPrevNode();
+		
+		// make "n1's prev node (tmp)"'s next node point to n2 if n1 was not the first node
+		if(tmp != null)
+			tmp.setNextNode(n2);
+		
+		// make n2's prev ref point to n1's old prev
+		n2.setPrevNode(tmp);
+		
+		/* Make "n1" and "n2's next (tmp)" node point to each other */
+		
+		// update tmp to be n2's old next
+		tmp = n2.getNextNode();
+		
+		// make "n2's next node (tmp)"'s prev node point to n1 if n2 was not the last node
+		if(tmp != null)
+			tmp.setPrevNode(n1);
+		
+		// make n1's next ref point to n2's old next
+		n1.setNextNode(tmp);
+		
+		/* Update n1 and n2 to point to each other in reverse */
+		n1.setPrevNode(n2);
+		n2.setNextNode(n1);
 		
 	}
 	
@@ -155,18 +207,15 @@ public class LinkedList {
 		// Ensure valid index
 		if(index < 0) return null;
 		
-		for(int i = 0; i < index && currRef != null; ++i) {
-			// Return when at correct index
-			if(i == index)
-				return currRef;
-			// go to next node
+		// Loop until at desired node
+		for(int i = 0; i < index; ++i) {
 			currRef = currRef.getNextNode();
+			// ensure we are still going to be in bounds
+			if(currRef.getNextNode() == null) return null;
 		}
 		
-		System.out.println("[getAt(" + index + ")]: Error: Index out of bounds");
-		
-		// Index out of bounds
-		return null;
+		// Curr Ref
+		return currRef;
 		
 	}
 	
