@@ -121,11 +121,11 @@ public class Driver implements Comparable<Driver> {
 		switch(getComparisonType()) {
 		case AREA:	// sort by area
 			return (Driver.m_comparisonDir == ComparisonDirection.ASCENDING) ? 
-					(int)Math.round(this.getArea() - other.getArea()) :
+					(int)Math.round(this.getArea() - other.getArea()) : 
 					(int)Math.round(other.getArea() - this.getArea());
 		case NAME:	// sort by name
 			return (Driver.m_comparisonDir == ComparisonDirection.ASCENDING) ? 
-					this.getName().compareTo(other.getName()) :
+					this.getName().compareTo(other.getName()) : 
 					other.getName().compareTo(this.getName());
 		default:	// this should never happen
 			return Integer.MIN_VALUE;

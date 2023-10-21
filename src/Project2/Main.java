@@ -27,15 +27,15 @@ public class Main {
 		System.out.println("Enter Driver Routes File: ");
 		
 		// Store data file name
-		//driverFile = scannerIn.nextLine();
-		driverFile = "pilot_data.txt";
+		driverFile = scannerIn.nextLine();
+		//driverFile = "pilot_data.txt";
 		
 		// Prompt for command file name
 		System.out.println("Enter Search/Sort Commands File: ");
 		
 		// Store data file name
-		//cmdFile = scannerIn.nextLine();
-		cmdFile = "cmd.txt";
+		cmdFile = scannerIn.nextLine();
+		//cmdFile = "cmd.txt";
 		
 		// Close input scanner
 		scannerIn.close();
