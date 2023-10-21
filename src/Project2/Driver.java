@@ -128,7 +128,7 @@ public class Driver implements Comparable<Driver> {
 	}
 	
 	@Override public String toString() {
-		return m_name;
+		return m_name + "	" + getArea();
 	}
 
 }

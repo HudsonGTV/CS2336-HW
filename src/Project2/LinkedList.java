@@ -281,7 +281,7 @@ public class LinkedList {
 		while(currNode != null) {
 			
 			// Print the current node's data
-			out += currNode.getValue().getName() + "	" + currNode.getValue().getArea() + "\n";
+			out += currNode.toString() + "\n";
 			
 			// Select next node
 			currNode = currNode.getNextNode();

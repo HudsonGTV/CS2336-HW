@@ -3,132 +3,162 @@
  * NetID: HKG230000
 **/
 
-// For teacher: You may have to remove this line if not running in Eclipse under a package name Project1
 package Project2;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Main {
 	
-	// Output file
-	private static final String OUTPUT_FILE = "pilot_areas.txt";
-	
-	// Config options
-	private static final int MAX_PILOT_COUNT = 20;
-	private static final int MAX_COORD_COUNT = 16;
-	
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		
-		// Variables to store driver info
-		String[] driverNames = new String[MAX_PILOT_COUNT];
-		// [pilot][coord#][coord (0=x, 1=y)]
-		double[][][] driverData = new double[MAX_PILOT_COUNT][MAX_COORD_COUNT][2];
+		// Driver and command file names
+		String driverFile = null;
+		String cmdFile = null;
 		
-		// Prompt user for file name
-		System.out.println("Enter input file name: ");
+		// Stores driver route data
+		LinkedList driverData = null;
 		
-		// Get file input data
+		// Scanner to read input
 		Scanner scannerIn = new Scanner(System.in);
 		
-		// Get name and close scanner
-		String fileName = scannerIn.nextLine();
+		// Prompt for driver data file
+		System.out.println("Enter Driver Routes File: ");
+		
+		// Store data file name
+		//driverFile = scannerIn.nextLine();
+		driverFile = "pilot_data.txt";
+		
+		// Prompt for command file name
+		System.out.println("Enter Search/Sort Commands File: ");
+		
+		// Store data file name
+		//cmdFile = scannerIn.nextLine();
+		cmdFile = "cmd.txt";
+		
+		// Close input scanner
 		scannerIn.close();
 		
-		// Load file data
-		LoadFileData(fileName, driverNames, driverData);
+		// Load all driver data
+		driverData = processDriverData(driverFile);
 		
-		// Calculate area of each pilot and output it to a file
-		OutputCalculatedData(driverNames, driverData);
+		// Catch in case function was unable to generate a linked list
+		if(driverData == null) {
+			System.out.println("ERROR: CANNOT CONTINUE AS UNABLE TO PARSE FILE");
+			return;
+		}
 		
-		// Notify user that program has completed
-		System.out.println("Done!");
+		// Print out data (debug)
+		System.out.println("Debug: Original data format:\n" + driverData.toString() + "\nFINAL OUTPUT BELOW:");
+		
+		// Process commands
+		processCommandData(cmdFile, driverData);
 		
 	}
 	
 	/**
-	 * Loads data from file and stores it in passed array args - assume file is in correct format
 	 * 
-	 * @param fileName - the name of the file to load
-	 * @param pilotNames - loads the pilot names from the specified file into this array
-	 * @param pilotData - loads the pilot data from the specified file into this array
-	 * @throws IOException 
-	**/
-	public static void LoadFileData(String fileName, String[] pilotNames, double[][][] pilotData) throws IOException {
+	 * @param fileName the name of the driver route data file
+	 * @return A linked list of the drivers and their areas
+	 */
+	public static LinkedList processDriverData(String fileName) {
 		
-		// File reader
+		// File reader and driver data
 		Scanner fileScanner = null;
+		LinkedList driverData = null;
 		
-		// Attempt to open the file
+		// Attempt to open file
 		try {
 			fileScanner = new Scanner(new FileReader(fileName));
-		} catch (FileNotFoundException e) {
-			System.out.println("Error: File not found. Printing stack trace...");
+		} catch(FileNotFoundException e) {
+			System.out.println("Error: Data file not found. Printing stack trace...");
 			e.printStackTrace();
-			return;
+			return null;
 		}
 		
-		for(int i = 0; fileScanner.hasNextLine(); ++i) {
+		// Create a linked list to store driver data
+		driverData = new LinkedList();
+		
+		// Read file line by line
+		while(fileScanner.hasNextLine()) {
 			
-			String nextLine = fileScanner.nextLine();
-			if(nextLine.length() < 2) break;
+			// Current line in file
+			String currLine = fileScanner.nextLine();
 			
-			// Split line into substrings
-			String[] lineStr = nextLine.split(" ");
+			// Create node with driver data
+			Driver driver = generateDriverFromData(currLine);
 			
-			// 1st element is the pilot name
-			pilotNames[i] = lineStr[0];
-			
-			// Parse coords
-			for(int j = 1; j < lineStr.length; ++j) {
-				// current pilot
-				// pilotData[i][j - 1][0/1]
-				
-				// Coords
-				String[] coords = lineStr[j].split(",");
-				// Put coords in data
-				pilotData[i][j - 1][0] = Double.parseDouble(coords[0]);
-				pilotData[i][j - 1][1] = Double.parseDouble(coords[1]);
-				
-			}
+			// If input was valid and node is not null, then put that node in the linked list
+			if(driver != null) driverData.addRear(new Node<Driver>(driver));
 			
 		}
 		
-		// Close file when we are done
+		// Close file scanner
 		fileScanner.close();
+		
+		// Returns the driver data linked list
+		return driverData;
 		
 	}
 	
 	/**
-	 * Calculates shape area and outputs it to a file
-	 * 
-	 * @param pilotNames - an array of the pilot names
-	 * @param pilotData - an array of the pilot coord data
-	**/
-	public static void OutputCalculatedData(String[] pilotNames, double[][][] pilotData) {
+	 * Generates a Driver object if line data is valid
+	 * @param line the data to generate a Driver object with a name and area
+	 * @return Driver object with area if valid data, otherwise null
+	 */
+	public static Driver generateDriverFromData(String line) {
 		
-		PrintWriter fwriter = null;
+		// Driver object
+		Driver out = null;
 		
-		// Attempt to write to file
-		try {
-			fwriter = new PrintWriter(OUTPUT_FILE, "UTF-8");
-		} catch(IOException e) {
-			System.out.println("Error: IOException. Printing stack trace...");
-			e.printStackTrace();
-			return;
+		// Min valid line length is 5 (s #,#) otherwise skip line
+		if(line.length() < 5) return null;
+		
+		// Extract name from line
+		String driverName = line.split("[0-9]")[0];
+		
+		// There MUST be whitespace before the first coords (aka after the name) so check for that
+		if(driverName.charAt(driverName.length() - 1) == ' ') {
+			driverName = driverName.substring(0, driverName.length() - 1);
+		} else return null;
+		
+		// Remove name from line
+		line = line.substring(driverName.length());
+		
+		// Ensure name is valid (alphas, hyphens, and apostrophes), otherwise skip line (also check for double or more spaces in a row 
+		// which is invalid, or trailing/leading spaces)
+		// !driverName.replaceAll(" ", "").matches("[a-zA-Z'-]+") || driverName.contains("  ") || !driverName.equals(driverName.trim())
+		if(!checkIfValidName(driverName)) {
+			//System.out.println("[Error] invalid driver name " + driverName);
+			return null;
 		}
 		
-		// Print pilot name and data
-		for(int i = 0; pilotNames[i] != null && i < pilotNames.length; ++i) {
-			// Format: <name><tab char><area>
-			fwriter.println(pilotNames[i] + "	" + shapeArea(pilotData[i]));
+		// Split line into substrings
+		String[] lineElements = line.split(" ");
+		
+		// Store driver coords
+		Double2[] coords = new Double2[lineElements.length - 1];
+		
+		// Loop thru each set of coords and store them in above var
+		for(int i = 1; i < lineElements.length; ++i) {
+			
+			// Check if invalid coords
+			if(!Double2.validateXYString(lineElements[i])) return null;
+			
+			// Add coords to list
+			coords[i - 1] = new Double2(lineElements[i]);
+			
 		}
 		
-		// Close the file
-		fwriter.close();
+		// Ensure last coord matches first otherwise return null;
+		if(!coords[0].matches(coords[coords.length - 1])) return null;
+		
+		// Calculate area of coords for new driver object
+		out = new Driver(driverName, shapeArea(coords));
+		
+		// Return the driver object
+		return out;
 		
 	}
 	
@@ -139,7 +169,7 @@ public class Main {
 	 * @param coords - an array of coords for the shape
 	 * @return area of given coords (rounded to 2 decimal places)
 	**/
-	public static double shapeArea(double[][] coords) {
+	public static double shapeArea(Double2[] coords) {
 		
 		// Store area
 		double sigmaVal = 0;
@@ -149,19 +179,166 @@ public class Main {
 		for(
 			int i = 0; 
 			!(
-				coords[0][0] == coords[i + 1][0] && 
-				coords[0][1] == coords[i + 1][1]		// checks if we've reached the end (when the curr coords are equal to the first coords)
-			) && i <= MAX_COORD_COUNT - 1; 				// ensure that we do not crash if user fails to have a matching start and end point
+				coords[0].x == coords[i + 1].x && 
+				coords[0].y == coords[i + 1].y		// checks if we've reached the end (when the curr coords are equal to the first coords)
+			) && i <= coords.length - 1; 			// ensure that we do not crash if user fails to have a matching start and end point
 			++i
 		) {
 			// Calculate sigmaVal (x_i+1 + x_i) * (y_i+1 - y_i)
-			sigmaVal += (coords[i + 1][0] + coords[i][0]) * (coords[i + 1][1] - coords[i][1]);
+			sigmaVal += (coords[i + 1].x + coords[i].x) * (coords[i + 1].y - coords[i].y);
 		}
 		
-		// Calculate area of shape rounded to 2 decimal places
+		// Calculate area of shape rounded to 2 decimal places as instructions say
 		return Math.round((Math.abs(sigmaVal) / 2.0) * 100.0) / 100.0;
 		//return Math.abs(sigmaVal) / 2.0;	// non-rounded area
 		
+	}
+	
+	/**
+	 * Processes commands to filter/rearrange LinkedList
+	 * @param file command file name
+	 * @param data LinkedList containing driver data
+	 */
+	public static void processCommandData(String file, LinkedList data) {
+		
+		// File reader
+		Scanner fileScanner = null;
+		
+		try {
+			fileScanner = new Scanner(new FileReader(file));
+		} catch(FileNotFoundException e) {
+			System.out.println("Error: Command file not found. Printing stack trace...");
+			e.printStackTrace();
+			return;
+		}
+		
+		// Read each line in file
+		while(fileScanner.hasNextLine()) {
+			
+			String line = fileScanner.nextLine();
+			
+			// Ensure not just whitespace
+			if(line.trim().equals("")) continue;
+			
+			// Command data
+			String[] fullCommand = line.split(" ");
+			
+			// Command name
+			String command = fullCommand[0];
+			
+			// Search for command (case insensitive since it was not specified)
+			switch(command.toLowerCase()) {
+			case "sort":	// Sort
+				commandSort(fullCommand, data);
+				break;
+			//case "filter":
+			default:		// Filter
+				commandFilter(line, data);
+				break;
+			}
+			
+		}
+		
+		// Close file scanner
+		fileScanner.close();
+		
+	}
+	
+	public static boolean checkIfDouble(String str) {
+		
+		// Ensure a valid double
+		try {
+			Double.parseDouble(str);
+		} catch(NumberFormatException e) {
+			return false;
+		}
+		
+		// Ensure no whitespace or double marker
+		return !str.contains(" ") && !str.endsWith("d");
+		
+	}
+	
+	private static void commandSort(String[] fullCmd, LinkedList data) {
+		
+		// Ensure valid number of params
+		if(fullCmd.length != 3) return;
+		
+		// Args
+		String argSortBy = fullCmd[1],
+				argOrder = fullCmd[2];
+		
+		// Get sort type
+		// was not specified if case sensitive or not so i assume case insensitive
+		switch(argSortBy.toLowerCase()) {
+		case "area":	// area arg
+			Driver.setComparisonType(ComparisonType.AREA);
+			break;
+		case "driver":	// driver arg
+			Driver.setComparisonType(ComparisonType.NAME);
+			break;
+		default:		// invalid sort by argument
+			return;
+		}
+		
+		// Get sort order
+		switch(argOrder.toLowerCase()) {
+		case "asc":		// sort in ascending order
+			Driver.setComparisonDirection(ComparisonDirection.ASCENDING);
+			break;
+		case "des":		// sort in descending order
+			Driver.setComparisonDirection(ComparisonDirection.DESCENDING);
+			break;
+		default:		// invalid sorting argument
+			return;
+		}
+		
+		// If at this point, then command was valid - sort list
+		data.sort();
+		
+		// Print out data (data.toString() already adds extra needed newline)
+		System.out.println(data.toString());
+		
+	}
+	
+	private static void commandFilter(String command, LinkedList data) {
+		
+		// Ensure valid number of params
+		if(command.split(" ").length == 0) return;
+		
+		if(checkIfValidName(command)) {
+			
+			// Search for name
+			System.out.println("search name");
+			_cmdFilterSearchName(command, data);
+			
+		} else if(checkIfDouble(command)) {
+			
+			// Search for area
+			System.out.println("search area");
+			
+		}
+		
+	}
+	
+	private static void _cmdFilterSearchName(String name, LinkedList data) {
+		
+		// Loop thru data
+		Node<Driver> currNode = data.getFirstNode();
+		while(currNode != null) {
+			
+			// Check if matches our search (case insensitve because not specified)
+			if(currNode.getValue().getName().toLowerCase().equals(name))
+				System.out.println(currNode.toString());
+			
+			// Go to next node
+			currNode = currNode.getNextNode();
+			
+		}
+		
+	}
+	
+	private static boolean checkIfValidName(String name) {
+		return name.replaceAll(" ", "").matches("[a-zA-Z'-]+") && !name.contains("  ") && name.equals(name.trim());
 	}
 
 }

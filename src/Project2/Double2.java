@@ -62,25 +62,11 @@ public class Double2 {
 		String[] coord = xy.split(",");
 		
 		// Ensure valid coord length & Ensure x/y are doubles
-		if(coord.length != 2 || !checkIfDouble(coord[0]) || !checkIfDouble(coord[1]))
+		if(coord.length != 2 || !Main.checkIfDouble(coord[0]) || !Main.checkIfDouble(coord[1]))
 			return false;
 		
 		// Valid coord if passed prev if statement
 		return true;
-		
-	}
-	
-	private static boolean checkIfDouble(String str) {
-		
-		// Ensure a valid double
-		try {
-			Double.parseDouble(str);
-		} catch(NumberFormatException e) {
-			return false;
-		}
-		
-		// Ensure no whitespace
-		return !str.contains(" ");
 		
 	}
 	
