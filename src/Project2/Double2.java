@@ -7,6 +7,7 @@ package Project2;
 
 public class Double2 {
 	
+	// Coords (mutable bc there is no need for getters and setters for this class [which i'm treating as a struct])
 	public double x = 0.0;
 	public double y = 0.0;
 	
@@ -45,6 +46,15 @@ public class Double2 {
 		// Invalid coords
 		return false;
 		
+	}
+	
+	/**
+	 * Checks if other's xy matches current's xy
+	 * @param other the other Double2 to compare to
+	 * @return
+	 */
+	public boolean matches(Double2 other) {
+		return this.x == other.x && this.y == other.y;
 	}
 	
 	public static boolean validateXYString(String xy) {

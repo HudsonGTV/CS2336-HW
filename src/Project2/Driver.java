@@ -10,14 +10,20 @@ enum ComparisonType {
 	NAME
 }
 
+enum ComparisonDirection {
+	ASCENDING,
+	DESCENDING
+}
+
 public class Driver implements Comparable<Driver> {
 	
 	// Info about the driver
 	private String m_name;
 	private double m_area;
 	
-	// Comparison type for sorting
+	// Comparison type/dir for sorting
 	private static ComparisonType m_comparisonMode = ComparisonType.AREA;
+	private static ComparisonDirection m_comparisonDir = ComparisonDirection.ASCENDING;
 	
 	public Driver() {
 		m_name = null;
@@ -60,6 +66,14 @@ public class Driver implements Comparable<Driver> {
 		return m_comparisonMode;
 	}
 	
+	/**
+	 * Gets the way we should sort when comparing
+	 * @return enum of comparison direction
+	 */
+	public static ComparisonDirection getComparisonDirection() {
+		return m_comparisonDir;
+	}
+	
 	/* SETTERS */
 	
 	/**
@@ -86,6 +100,10 @@ public class Driver implements Comparable<Driver> {
 		m_comparisonMode = comp;
 	}
 	
+	public static void setComparisonDirection(ComparisonDirection dir) {
+		m_comparisonDir = dir;
+	}
+	
 	/* MISC */
 
 	/**
@@ -96,9 +114,13 @@ public class Driver implements Comparable<Driver> {
 		
 		switch(getComparisonType()) {
 		case AREA:	// sort by area
-			return (int)Math.round(this.getArea() - other.getArea());
+			return (Driver.m_comparisonDir == ComparisonDirection.ASCENDING) ? 
+					(int)Math.round(this.getArea() - other.getArea()) :
+					(int)Math.round(other.getArea() - this.getArea());
 		case NAME:	// sort by name
-			return this.getName().compareTo(other.getName());
+			return (Driver.m_comparisonDir == ComparisonDirection.ASCENDING) ? 
+					this.getName().compareTo(other.getName()) :
+					other.getName().compareTo(this.getName());
 		default:	// this should never happen
 			return Integer.MIN_VALUE;
 		}
