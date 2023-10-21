@@ -50,7 +50,7 @@ public class Main {
 		}
 		
 		// Print out data (debug)
-		System.out.println("Debug: Original data format:\n" + driverData.toString() + "\nFINAL OUTPUT BELOW:");
+		//System.out.println("Debug: Original data format:\n" + driverData.toString() + "\nFINAL OUTPUT BELOW:");
 		
 		// Process commands
 		processCommandData(cmdFile, driverData);
@@ -119,7 +119,7 @@ public class Main {
 		String driverName = line.split("[0-9]")[0];
 		
 		// There MUST be whitespace before the first coords (aka after the name) so check for that
-		if(driverName.charAt(driverName.length() - 1) == ' ') {
+		if(driverName.length() > 0 && driverName.charAt(driverName.length() - 1) == ' ') {
 			driverName = driverName.substring(0, driverName.length() - 1);
 		} else return null;
 		
@@ -195,6 +195,25 @@ public class Main {
 	}
 	
 	/**
+	 * Checks if a number is a double (more strict: whitespace or ending with d makes it not a double)
+	 * @param str the string to check if double
+	 * @return true if valid double, false if not
+	 */
+	public static boolean checkIfDouble(String str) {
+		
+		// Ensure a valid double
+		try {
+			Double.parseDouble(str);
+		} catch(NumberFormatException e) {
+			return false;
+		}
+		
+		// Ensure no whitespace or double marker
+		return !str.contains(" ") && !str.endsWith("d");
+		
+	}
+	
+	/**
 	 * Processes commands to filter/rearrange LinkedList
 	 * @param file command file name
 	 * @param data LinkedList containing driver data
@@ -244,20 +263,11 @@ public class Main {
 		
 	}
 	
-	public static boolean checkIfDouble(String str) {
-		
-		// Ensure a valid double
-		try {
-			Double.parseDouble(str);
-		} catch(NumberFormatException e) {
-			return false;
-		}
-		
-		// Ensure no whitespace or double marker
-		return !str.contains(" ") && !str.endsWith("d");
-		
-	}
-	
+	/**
+	 * The sort command to be run by the processCommandData command handler
+	 * @param fullCmd the entire command split into its args
+	 * @param data the driver data linked list
+	 */
 	private static void commandSort(String[] fullCmd, LinkedList data) {
 		
 		// Ensure valid number of params
@@ -300,40 +310,82 @@ public class Main {
 		
 	}
 	
+	/**
+	 * The filter command (can filter either by area or name)
+	 * @param command the entire command line as one string
+	 * @param data the driver data linked list
+	 */
 	private static void commandFilter(String command, LinkedList data) {
 		
 		// Ensure valid number of params
 		if(command.split(" ").length == 0) return;
 		
+		// Check if searching for name
 		if(checkIfValidName(command)) {
-			
 			// Search for name
-			System.out.println("search name");
 			_cmdFilterSearchName(command, data);
-			
-		} else if(checkIfDouble(command)) {
-			
+		} else if(checkIfDouble(command)) {		// Check if searching for area
 			// Search for area
-			System.out.println("search area");
-			
+			_cmdFilterSearchArea(Double.parseDouble(command), data);
 		}
 		
 	}
 	
 	private static void _cmdFilterSearchName(String name, LinkedList data) {
 		
+		// Store # of results in case nothing is found
+		int results = 0;
+		
 		// Loop thru data
 		Node<Driver> currNode = data.getFirstNode();
 		while(currNode != null) {
 			
-			// Check if matches our search (case insensitve because not specified)
-			if(currNode.getValue().getName().toLowerCase().equals(name))
+			// Check if matches our search (case insensitive because not specified)
+			if(currNode.getValue().getName().toLowerCase().equals(name.toLowerCase())) {
 				System.out.println(currNode.toString());
+				++results;
+			}
 			
 			// Go to next node
 			currNode = currNode.getNextNode();
 			
 		}
+		
+		// Check if no hits
+		if(results == 0)
+			System.out.println(name + " not found");
+		
+		// Blank line between outputs as mentioned in instructions
+		System.out.println();
+		
+	}
+	
+	private static void _cmdFilterSearchArea(double area, LinkedList data) {
+		
+		// Store # of results in case nothing is found
+		int results = 0;
+		
+		// Loop thru data
+		Node<Driver> currNode = data.getFirstNode();
+		while(currNode != null) {
+			
+			// Check if matches our search
+			if(currNode.getValue().getArea() == area) {
+				System.out.println(currNode.toString());
+				++results;
+			}
+			
+			// Go to next node
+			currNode = currNode.getNextNode();
+			
+		}
+		
+		// Check if no hits
+		if(results == 0)
+			System.out.println(area + " not found");
+		
+		// Blank line between outputs as mentioned in instructions
+		System.out.println();
 		
 	}
 	

@@ -5,11 +5,13 @@
 
 package Project2;
 
+// For sorting
 enum ComparisonType {
 	AREA,
 	NAME
 }
 
+// For sorting
 enum ComparisonDirection {
 	ASCENDING,
 	DESCENDING
@@ -100,6 +102,10 @@ public class Driver implements Comparable<Driver> {
 		m_comparisonMode = comp;
 	}
 	
+	/**
+	 * Changes if ascending or descending order
+	 * @param dir new order
+	 */
 	public static void setComparisonDirection(ComparisonDirection dir) {
 		m_comparisonDir = dir;
 	}
@@ -128,7 +134,7 @@ public class Driver implements Comparable<Driver> {
 	}
 	
 	@Override public String toString() {
-		return m_name + "	" + getArea();
+		return getName() + "	" + getArea();
 	}
 
 }
