@@ -35,15 +35,15 @@ public class Main {
 		System.out.println("Enter Driver Routes File: ");
 		
 		// Store data file name
-		//driverFile = scannerIn.nextLine();
-		driverFile = "pilot_data.txt";
+		driverFile = scannerIn.nextLine();
+		//driverFile = "pilot_data.txt";
 		
 		// Prompt for command file name
 		System.out.println("Enter Search/Sort Commands File: ");
 		
 		// Store data file name
-		//cmdFile = scannerIn.nextLine();
-		cmdFile = "cmd-o.txt";
+		cmdFile = scannerIn.nextLine();
+		//cmdFile = "cmd-o.txt";
 		
 		// Close input scanner
 		scannerIn.close();
@@ -57,8 +57,8 @@ public class Main {
 			return;
 		}
 		
-		// Print out data (debug)
-		//System.out.println("Debug: Original data format:\n" + driverData.toString() + "\nFINAL OUTPUT BELOW:");
+		// Print out initial data
+		System.out.println("\nDebug: Original data format:\n" + driverData.toString() + "\nCOMMANDS:");
 		
 		// Process commands
 		processCommandData(cmdFile, driverData);
