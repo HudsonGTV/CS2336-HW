@@ -1,0 +1,14 @@
+sort area asc
+Greedo
+10
+sort area des
+Tina
+25.5
+sort driver asc
+ghln bhkb jhb jhb jh
+ 4467   6
+Tina Turner
+sort
+ sort
+sort area d
+sort d des

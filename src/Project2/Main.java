@@ -9,7 +9,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
+//For sorting
+enum ComparisonDirection {
+	ASCENDING,
+	DESCENDING
+}
+
 public class Main {
+	
+	public static ComparisonDirection sortDirection = ComparisonDirection.ASCENDING;
 	
 	public static void main(String[] args) {
 		
@@ -27,15 +35,15 @@ public class Main {
 		System.out.println("Enter Driver Routes File: ");
 		
 		// Store data file name
-		driverFile = scannerIn.nextLine();
-		//driverFile = "pilot_data.txt";
+		//driverFile = scannerIn.nextLine();
+		driverFile = "pilot_data.txt";
 		
 		// Prompt for command file name
 		System.out.println("Enter Search/Sort Commands File: ");
 		
 		// Store data file name
-		cmdFile = scannerIn.nextLine();
-		//cmdFile = "cmd.txt";
+		//cmdFile = scannerIn.nextLine();
+		cmdFile = "cmd-o.txt";
 		
 		// Close input scanner
 		scannerIn.close();
@@ -45,7 +53,7 @@ public class Main {
 		
 		// Catch in case function was unable to generate a linked list
 		if(driverData == null) {
-			System.out.println("ERROR: CANNOT CONTINUE AS UNABLE TO PARSE FILE");
+			System.out.println("Error: CANNOT CONTINUE AS UNABLE TO GERNERATE LINKED LIST");
 			return;
 		}
 		
@@ -54,6 +62,25 @@ public class Main {
 		
 		// Process commands
 		processCommandData(cmdFile, driverData);
+		
+	}
+	
+	/**
+	 * Checks if a number is a double (more strict: whitespace or ending with d makes it not a double)
+	 * @param str the string to check if double
+	 * @return true if valid double, false if not
+	 */
+	public static boolean checkIfDouble(String str) {
+		
+		// Ensure a valid double
+		try {
+			Double.parseDouble(str);
+		} catch(NumberFormatException e) {
+			return false;
+		}
+		
+		// Ensure no whitespace or double marker
+		return !str.contains(" ") && !str.endsWith("d");
 		
 	}
 	
@@ -72,8 +99,7 @@ public class Main {
 		try {
 			fileScanner = new Scanner(new FileReader(fileName));
 		} catch(FileNotFoundException e) {
-			System.out.println("Error: Data file not found. Printing stack trace...");
-			e.printStackTrace();
+			System.out.println("Error: Data file not found.");
 			return null;
 		}
 		
@@ -115,8 +141,15 @@ public class Main {
 		// Min valid line length is 5 (s #,#) otherwise skip line
 		if(line.length() < 5) return null;
 		
+		
+		
 		// Extract name from line
 		String driverName = line.split("[0-9]")[0];
+		
+		// Check that we are not grabbing a negative sign from the first number
+		if((driverName.endsWith(" -") || driverName.endsWith(" -.")) && String.valueOf(line.charAt(driverName.length())).matches("[0-9]")) {
+			driverName = driverName.substring(0, driverName.length() - (driverName.endsWith(" -") ? 1 : 2));
+		}
 		
 		// There MUST be whitespace before the first coords (aka after the name) so check for that
 		if(driverName.length() > 0 && driverName.charAt(driverName.length() - 1) == ' ') {
@@ -195,25 +228,6 @@ public class Main {
 	}
 	
 	/**
-	 * Checks if a number is a double (more strict: whitespace or ending with d makes it not a double)
-	 * @param str the string to check if double
-	 * @return true if valid double, false if not
-	 */
-	public static boolean checkIfDouble(String str) {
-		
-		// Ensure a valid double
-		try {
-			Double.parseDouble(str);
-		} catch(NumberFormatException e) {
-			return false;
-		}
-		
-		// Ensure no whitespace or double marker
-		return !str.contains(" ") && !str.endsWith("d");
-		
-	}
-	
-	/**
 	 * Processes commands to filter/rearrange LinkedList
 	 * @param file command file name
 	 * @param data LinkedList containing driver data
@@ -226,8 +240,7 @@ public class Main {
 		try {
 			fileScanner = new Scanner(new FileReader(file));
 		} catch(FileNotFoundException e) {
-			System.out.println("Error: Command file not found. Printing stack trace...");
-			e.printStackTrace();
+			System.out.println("Error: Command file not found.");
 			return;
 		}
 		
@@ -293,10 +306,10 @@ public class Main {
 		// Get sort order
 		switch(argOrder.toLowerCase()) {
 		case "asc":		// sort in ascending order
-			Driver.setComparisonDirection(ComparisonDirection.ASCENDING);
+			sortDirection = ComparisonDirection.ASCENDING;
 			break;
 		case "des":		// sort in descending order
-			Driver.setComparisonDirection(ComparisonDirection.DESCENDING);
+			sortDirection = ComparisonDirection.DESCENDING;
 			break;
 		default:		// invalid sorting argument
 			return;
@@ -331,6 +344,12 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Helper for commandFilter() function.
+	 * Filters by name
+	 * @param name the name to filter by
+	 * @param data linked list containing user data
+	 */
 	private static void _cmdFilterSearchName(String name, LinkedList data) {
 		
 		// Store # of results in case nothing is found
@@ -360,6 +379,12 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Helper for commandFilter() function.
+	 * Filters by area
+	 * @param area the area to filter by
+	 * @param data linked list containing user data
+	 */
 	private static void _cmdFilterSearchArea(double area, LinkedList data) {
 		
 		// Store # of results in case nothing is found
@@ -389,8 +414,17 @@ public class Main {
 		
 	}
 	
+	/**
+	 * Ensures that the given name is valid.
+	 * A valid name may contain spaces (but not in front or at the end), hyphens, and/or apostrophes
+	 * @param name the name to check if valid
+	 * @return if name is valid or not
+	 */
 	private static boolean checkIfValidName(String name) {
-		return name.replaceAll(" ", "").matches("[a-zA-Z'-]+") && !name.contains("  ") && name.equals(name.trim());
+		// Check if name is valid
+		return name.replaceAll(" ", "").matches("[a-zA-Z'-]+") && 	// strip spaces in between words for comparison and see if matches vaid chars
+				!name.contains("  ") && 							// disallow double or more spaces to separate words as this indicates invalid format for file
+				name.equals(name.trim()); 							// ensure that the name does not have any whitespace before or after itself
 	}
 
 }

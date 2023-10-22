@@ -104,7 +104,7 @@ public class LinkedList {
 	}
 	
 	/**
-	 * adds given node to front of list
+	 * adds given node to front of list - acts as setter for m_head
 	 * @param node the node to add
 	 */
 	public void addFront(Node<Driver> node) {
@@ -130,7 +130,7 @@ public class LinkedList {
 	}
 	
 	/**
-	 * adds given node to rear of list
+	 * adds given node to rear of list - acts as setter for m_tail
 	 * @param node the node to add
 	 */
 	public void addRear(Node<Driver> node) {
@@ -161,14 +161,17 @@ public class LinkedList {
 	 * @param index location to insert at
 	 * @return if was able to add at location or if it was an invalid location/the node didn't exist
 	 */
-	public boolean insertAt(Node<Driver> node, int index) {
+	/*public boolean insertAt(Node<Driver> node, int index) {
 		
 		// Guard against null node or invalid index
 		if(node == null || index < 0) return false;
 		
-		// Check if head node
+		// Check if head node or tail node
 		if(index == 0) {
 			addFront(node);
+			return true;
+		} else if(index == size() - 1) {
+			addRear(node);
 			return true;
 		}
 		
@@ -198,7 +201,7 @@ public class LinkedList {
 		// Show that function added node successfully
 		return true;
 		
-	}
+	}*/
 	
 	/* Getters */
 	
@@ -275,7 +278,13 @@ public class LinkedList {
 		String out = "";
 		
 		// Current node for loop
-		Node<Driver> currNode = getFirstNode();
+		Node<Driver> currNode = null;
+		
+		// Determine sort dir
+		if(Main.sortDirection == ComparisonDirection.ASCENDING)
+			currNode = getFirstNode();
+		else
+			currNode = getLastNode();
 		
 		// Loop thru each node
 		while(currNode != null) {
@@ -283,19 +292,21 @@ public class LinkedList {
 			// Print the current node's data
 			out += currNode.toString() + "\n";
 			
-			// Select next node
-			currNode = currNode.getNextNode();
+			// Select next/prev node
+			if(Main.sortDirection == ComparisonDirection.ASCENDING)
+				currNode = currNode.getNextNode();
+			else
+				currNode = currNode.getPrevNode();
 			
 		}
 		
+		// returns all the nodes as 1 string
 		return out;
 		
 	}
 	
-	// Attempts to add node if list is empty. returns false if 
-	
 	/**
-	 * Attempts to add node if list is empty.
+	 * Attempts to add node if list is empty - helper function
 	 * @param node the node to add
 	 * @return false if list is not empty, true if successfully adds node
 	 */

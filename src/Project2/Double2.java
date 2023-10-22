@@ -7,7 +7,7 @@ package Project2;
 
 public class Double2 {
 	
-	// Coords (mutable bc there is no need for getters and setters for this class [which i'm treating as a struct])
+	// Coords (public bc there is no need for getters and setters for this class [which i'm treating as a struct])
 	public double x = 0.0;
 	public double y = 0.0;
 	

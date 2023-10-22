@@ -21,6 +21,7 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
 	}
 	
 	public Node(T value) {
+		this();
 		m_value = value;
 	}
 	
@@ -51,6 +52,11 @@ public class Node<T extends Comparable<T>> implements Comparable<T> {
 	}
 	
 	/* SETTERS */
+	
+	// node payloads should not be writable generally, so commenting this out
+	/*public void setValue(T value) {
+		m_value = value;
+	}*/
 	
 	/**
 	 * Sets next node to specified value

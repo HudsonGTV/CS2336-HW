@@ -1,0 +1,38 @@
+Main.java
+	main()
+		Input:
+			Create a scanner to get input
+			Prompt user for driver data file name
+			Read input line
+			Prompt user for command file name
+			Read input line
+			Close the input scanner
+		Output/Processing:
+			Create linked list using driver data from specified file
+			Ensure that we were able to successfully do this and that we actually generated a linked list
+			Read in the commands from the command file specified and print needed data
+	Functions needed in Main:
+		helper function to ensure a number is a double
+		function to process the driver data and return a linked list with that data in it
+			a helper function to generate driver object from a line in the data file
+			another helper function to calculate the area from the points
+		function to process the command data and output to console any command output
+			helper function for the sort command
+			helper command for the filter command
+				helper for sorting by name
+				helper for sorting by area
+		helper function to check if a driver name is valid
+	
+LinkedList.java
+	Sort function:
+		Uses bubble sort to sort function
+		compareTo is modified to change how it sorts (determines sort type and sort direction)
+		Algorithm/Logic:
+			loop until sorted
+				loop thru each node
+					determine if node to right of current is smaller. if so, swap
+				determine if we made any swaps in above loop. if not, its already sorted, if so, continue to sort 
+				  (it is guarenteed to be sorted after n loops with n = size of linked list)
+		function to swap a node at given index with node to its right (next node)
+	
+Additional pseudocode can be found in the form of detailed comments

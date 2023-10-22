@@ -1,7 +1,3 @@
 sort area asc
 Greedo
 10
-sort area des
-Tina
-25.5
-sort driver asc
