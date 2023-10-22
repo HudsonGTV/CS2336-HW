@@ -141,8 +141,6 @@ public class Main {
 		// Min valid line length is 5 (s #,#) otherwise skip line
 		if(line.length() < 5) return null;
 		
-		
-		
 		// Extract name from line
 		String driverName = line.split("[0-9]")[0];
 		
