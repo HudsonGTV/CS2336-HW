@@ -5,17 +5,17 @@
 
 package Project2;
 
-public class LinkedList {
+public class LinkedList<T extends Comparable<T>> {
 	
-	private Node<Driver> m_head;
-	private Node<Driver> m_tail;
+	private Node<T> m_head;
+	private Node<T> m_tail;
 	
 	public LinkedList() {
 		m_head = null;
 		m_tail = null;
 	}
 	
-	public LinkedList(Node<Driver> head) {
+	public LinkedList(Node<T> head) {
 		m_head = head;
 		m_tail = head;
 	}
@@ -34,7 +34,7 @@ public class LinkedList {
 			
 			// Run thru entire list
 			for(int j = 0; j < size - 1; ++j) {
-				Node<Driver> curr = getAt(j);
+				Node<T> curr = getAt(j);
 				// if curr node > next node then swap
 				if(curr.getValue().compareTo(curr.getNextNode().getValue()) > 0) {
 					didSwap = true;
@@ -56,16 +56,16 @@ public class LinkedList {
 	public void swap(int index) {
 		
 		// Get ref to first node
-		Node<Driver> n1 = getAt(index);
+		Node<T> n1 = getAt(index);
 		
 		// Ensure a swap is possible
 		if(n1 == null || n1.getNextNode() == null) return;
 		
 		// Get reference to second node
-		Node<Driver> n2 = n1.getNextNode();
+		Node<T> n2 = n1.getNextNode();
 		
 		// Temp node
-		Node<Driver> tmp = null;
+		Node<T> tmp = null;
 		
 		/* Check if head and tail need to point to other node */
 		if(m_head == n1)
@@ -107,7 +107,7 @@ public class LinkedList {
 	 * adds given node to front of list - acts as setter for m_head
 	 * @param node the node to add
 	 */
-	public void addFront(Node<Driver> node) {
+	public void addFront(Node<T> node) {
 		
 		// Guard against null node
 		if(node == null) return;
@@ -116,7 +116,7 @@ public class LinkedList {
 		if(addNodeToEmptyList(node)) return;
 		
 		// Normal add
-		Node<Driver> prevHead = m_head;
+		Node<T> prevHead = m_head;
 		
 		// Set old head's prev to point to new node
 		prevHead.setPrevNode(node);
@@ -133,7 +133,7 @@ public class LinkedList {
 	 * adds given node to rear of list - acts as setter for m_tail
 	 * @param node the node to add
 	 */
-	public void addRear(Node<Driver> node) {
+	public void addRear(Node<T> node) {
 		
 		// Guard against null node
 		if(node == null) return;
@@ -142,7 +142,7 @@ public class LinkedList {
 		if(addNodeToEmptyList(node)) return;
 		
 		// Normal add
-		Node<Driver> prevTail = m_tail;
+		Node<T> prevTail = m_tail;
 		
 		// Set old tail's next to point to new node
 		prevTail.setNextNode(node);
@@ -210,9 +210,9 @@ public class LinkedList {
 	 * @param index index of the node
 	 * @return the node at the given index
 	 */
-	public Node<Driver> getAt(int index) {
+	public Node<T> getAt(int index) {
 		
-		Node<Driver> currRef = getFirstNode();
+		Node<T> currRef = getFirstNode();
 		
 		// Ensure valid index
 		if(index < 0) return null;
@@ -233,7 +233,7 @@ public class LinkedList {
 	 * Gets head node
 	 * @return the head node
 	 */
-	public Node<Driver> getFirstNode() {
+	public Node<T> getFirstNode() {
 		return m_head;
 	}
 	
@@ -241,7 +241,7 @@ public class LinkedList {
 	 * Gets tail node
 	 * @returnthe tail node
 	 */
-	public Node<Driver> getLastNode() {
+	public Node<T> getLastNode() {
 		return m_tail;
 	}
 	
@@ -254,7 +254,7 @@ public class LinkedList {
 		int size = 0;
 		
 		// Iterate thru list
-		for(Node<Driver> currNode = getFirstNode(); currNode != null; currNode = currNode.getNextNode(), ++size);
+		for(Node<T> currNode = getFirstNode(); currNode != null; currNode = currNode.getNextNode(), ++size);
 		
 		return size;
 		
@@ -278,7 +278,7 @@ public class LinkedList {
 		String out = "";
 		
 		// Current node for loop
-		Node<Driver> currNode = null;
+		Node<T> currNode = null;
 		
 		// Determine sort dir
 		if(Main.sortDirection == ComparisonDirection.ASCENDING)
@@ -310,7 +310,7 @@ public class LinkedList {
 	 * @param node the node to add
 	 * @return false if list is not empty, true if successfully adds node
 	 */
-	private boolean addNodeToEmptyList(Node<Driver> node) {
+	private boolean addNodeToEmptyList(Node<T> node) {
 		
 		// Dont do anything if list is not actually empty
 		if(m_head != null || m_tail != null) return false;
