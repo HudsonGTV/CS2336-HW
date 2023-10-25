@@ -161,7 +161,7 @@ public class LinkedList<T extends Comparable<T>> {
 	 * @param index location to insert at
 	 * @return if was able to add at location or if it was an invalid location/the node didn't exist
 	 */
-	/*public boolean insertAt(Node<Driver> node, int index) {
+	/*public boolean insertAt(Node<T> node, int index) {
 		
 		// Guard against null node or invalid index
 		if(node == null || index < 0) return false;
@@ -176,7 +176,7 @@ public class LinkedList<T extends Comparable<T>> {
 		}
 		
 		// Current node for loop
-		Node<Driver> oldCurrNode = getFirstNode();
+		Node<T> oldCurrNode = getFirstNode();
 		
 		// Loop until at index
 		for(int i = 0; i < index; ++i) {
@@ -185,8 +185,8 @@ public class LinkedList<T extends Comparable<T>> {
 		}
 		
 		// Store ref to prev and next node
-		Node<Driver> prevNode = oldCurrNode.getPrevNode();
-		Node<Driver> nextNode = oldCurrNode.getNextNode();
+		Node<T> prevNode = oldCurrNode.getPrevNode();
+		Node<T> nextNode = oldCurrNode.getNextNode();
 		
 		// Set correct values on given node
 		node.setPrevNode(prevNode);

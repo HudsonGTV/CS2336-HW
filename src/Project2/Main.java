@@ -26,7 +26,7 @@ public class Main {
 		String cmdFile = null;
 		
 		// Stores driver route data
-		LinkedList driverData = null;
+		LinkedList<Driver> driverData = null;
 		
 		// Scanner to read input
 		Scanner scannerIn = new Scanner(System.in);
@@ -89,11 +89,11 @@ public class Main {
 	 * @param fileName the name of the driver route data file
 	 * @return A linked list of the drivers and their areas
 	 */
-	public static LinkedList processDriverData(String fileName) {
+	public static LinkedList<Driver> processDriverData(String fileName) {
 		
 		// File reader and driver data
 		Scanner fileScanner = null;
-		LinkedList driverData = null;
+		LinkedList<Driver> driverData = null;
 		
 		// Attempt to open file
 		try {
@@ -104,7 +104,7 @@ public class Main {
 		}
 		
 		// Create a linked list to store driver data
-		driverData = new LinkedList();
+		driverData = new LinkedList<Driver>();
 		
 		// Read file line by line
 		while(fileScanner.hasNextLine()) {
@@ -230,7 +230,7 @@ public class Main {
 	 * @param file command file name
 	 * @param data LinkedList containing driver data
 	 */
-	public static void processCommandData(String file, LinkedList data) {
+	public static void processCommandData(String file, LinkedList<Driver> data) {
 		
 		// File reader
 		Scanner fileScanner = null;
@@ -279,7 +279,7 @@ public class Main {
 	 * @param fullCmd the entire command split into its args
 	 * @param data the driver data linked list
 	 */
-	private static void commandSort(String[] fullCmd, LinkedList data) {
+	private static void commandSort(String[] fullCmd, LinkedList<Driver> data) {
 		
 		// Ensure valid number of params
 		if(fullCmd.length != 3) return;
@@ -326,7 +326,7 @@ public class Main {
 	 * @param command the entire command line as one string
 	 * @param data the driver data linked list
 	 */
-	private static void commandFilter(String command, LinkedList data) {
+	private static void commandFilter(String command, LinkedList<Driver> data) {
 		
 		// Ensure valid number of params
 		if(command.split(" ").length == 0) return;
@@ -348,7 +348,7 @@ public class Main {
 	 * @param name the name to filter by
 	 * @param data linked list containing user data
 	 */
-	private static void _cmdFilterSearchName(String name, LinkedList data) {
+	private static void _cmdFilterSearchName(String name, LinkedList<Driver> data) {
 		
 		// Store # of results in case nothing is found
 		int results = 0;
@@ -383,7 +383,7 @@ public class Main {
 	 * @param area the area to filter by
 	 * @param data linked list containing user data
 	 */
-	private static void _cmdFilterSearchArea(double area, LinkedList data) {
+	private static void _cmdFilterSearchArea(double area, LinkedList<Driver> data) {
 		
 		// Store # of results in case nothing is found
 		int results = 0;
