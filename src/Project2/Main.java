@@ -58,7 +58,7 @@ public class Main {
 		}
 		
 		// Print out initial data
-		System.out.println("\nDebug: Original data format:\n" + driverData.toString() + "\nCOMMANDS:");
+		System.out.println(driverData.toString() + "\n");
 		
 		// Process commands
 		processCommandData(cmdFile, driverData);
